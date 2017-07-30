@@ -50,6 +50,6 @@ export class ChildComponent{
        @Output() onChanged = new EventEmitter<any>();
     change(increased:any) {
         this.onChanged.emit(increased);
-        console.log("222");
+        
     }
 }

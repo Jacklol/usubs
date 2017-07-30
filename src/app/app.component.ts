@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpService} from './http.service';
 import { Response} from '@angular/http';
-import {VideoSearch} from './user';
+import {VideoSearchBase} from './user';
 @Component({
   selector: 'my-app',
   template: `
@@ -128,7 +128,7 @@ export class AppComponent{
 	
 	main(page:number){
 			this.getQuantity();
-			this.httpService.getSearch(this.title,this.selectedPage,this.quantity).subscribe((data:VideoSearch)=>{
+			this.httpService.getSearch(this.title,this.selectedPage,this.quantity).subscribe((data:VideoSearchBase)=>{
 			this.OBjectvidio=data;
 			this.MassivOfVidio=data.items;
 			console.log(data);
@@ -139,7 +139,7 @@ export class AppComponent{
 				this.httpService.getVidios(Vidio).subscribe((res)=>{
 					var response = res.json();
 					
-					this.MassivOfVidio[i].vidio=response;
+					this.MassivOfVidio[i].video=response;
 
 				});
 			});

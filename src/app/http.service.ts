@@ -3,21 +3,20 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { Http, Headers, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-
+import {VideoSearchBase} from './user';
 @Injectable()
 export class HttpService{
     private _repeatTime = 1000 * 0.01; 
     ink=0;
-    jack:any=undefined;
+    
     
     constructor(private http: Http){
     }
      
-    getSearch(title:string,page:number,quantity:number) : Observable<any>{
+    getSearch(title:string,page:number,quantity:number) : Observable<VideoSearchBase>{
 
        var stopPolling = new Subject();
        var currentTitle = "";
-       var tany:any="tany";
        var pagetoken='';
        var requestStarted = false;
 
