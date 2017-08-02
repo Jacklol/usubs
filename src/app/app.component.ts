@@ -1,11 +1,24 @@
-import { Component } from '@angular/core';
+import { Component,OnInit} from '@angular/core';
 import { HttpService} from './http.service';
 import { Response} from '@angular/http';
 import {VideoSearchBase} from './user';
 @Component({
   selector: 'my-app',
   template: `
-  		
+  		<div class='center_wrapper'>
+  			<div class='center'>
+  			  			<nav>
+                <a routerLink="">Главная</a>
+			</nav>
+   			
+  			<first [(Title)]="title"></first>
+  		    <button *ngIf="!show" (click)="hidden()">{{show ? 'hide' : 'show'}}</button>
+  			
+  			</div>
+  		</div>
+
+
+  		<div class='content_wrapper'>
   		<div class='content'>
   			<div  *ngIf="show">	
   				<h1>find</h1>
@@ -23,45 +36,50 @@ import {VideoSearchBase} from './user';
   			 	(onChanged)="onSelectedVideo($event)">
   			</child-comp>
   		</div>
-  				
+  		</div>		
 	</div>
 	
-		<div class='center_wrapper'>
-  			<div class='center'>
-  			  			<nav>
-                <a routerLink="">Главная</a>
-			</nav>
-   			
-  			<first [(Title)]="title"></first>
-  		    <button *ngIf="!show" (click)="hidden()">{{show ? 'hide' : 'show'}}</button>
-  			
-  			</div>
-  		</div>
+		
   		<div class="middle">
 	  	<router-outlet ></router-outlet>	
 	  	</div>	
+	  	 <footer style="position: absolute; bottom: 0">
+    	Конец документа.
+  		</footer>
   `, providers: [HttpService],  styles: [
 
         `
+        .body{
+        	style="height: 1000px; position: relative
+        }
+        .content_wrapper{
+        	position: relative;
+    		background: #f0f0f0; 
+    		overflow: auto; 
+    		height: 1100px;
+    		width: 437px;
+        }
         .middle{
         	float:left;
         	margin-left:20px;
         }
         .content{
-        	float: left
+        	float: left;
+        	position: absolute;
+        	top: 15px;
         }
         .center_wrapper{
-        z-index:-1;
-     width: 100%;
-    height: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center; 
-    overflow: auto;   
-    }
+        z-index:1;
+     	width: 100%;
+    	height: 100%;
+    	position: fixed;
+    	top: 0;
+    	left: 0;
+    	display: flex;
+    	align-items: center;
+    	justify-content: center; 
+    	overflow: auto;   
+    	}
         .center{
         	
         	
@@ -97,7 +115,7 @@ import {VideoSearchBase} from './user';
         }
         `]
 })
-export class AppComponent{ 
+export class AppComponent { 
 	name: string = "Tom";
 	show: boolean = false;
 	nothidden:string='';
@@ -119,20 +137,45 @@ export class AppComponent{
 	constructor (
 		private httpService: HttpService){
 		this.getpages();
-		this.getsize();
 		
-		
-
+		this.wheel();
 	}
 	 
-	
+	wheel(){
+
+		console.log(1111);
+		document.onwheel = (e) =>{
+		var element=document.querySelector('.content_wrapper');
+
+		var parent= e.target.parentNode;
+		console.log(parent);
+		console.log(e.target);
+		if (e.target!= element){
+		while(parent!==document&&parent!==element){
+			parent=parent.parentNode;
+			console.log(parent);
+		}}
+  		if (parent==document) return;
+  		var area = element;
+  		var delta = e.deltaY || e.detail || e.wheelDelta;
+ 			 if (delta < 0 && element.scrollTop == 0) {
+ 			/* this.onSelectedPage(this.selectedPage-1);*/
+    		e.preventDefault();
+  		}
+ 	 		if (delta > 0 && element.scrollHeight - element.clientHeight - element.scrollTop <= 1) {
+   	 		console.log("here");
+   	 		this.onSelectedPage(this.selectedPage+1);
+   	 		e.preventDefault();
+  		}
+    	console.log(element.scrollHeight - element.clientHeight - element.scrollTop );
+		};
+	}
 	main(page:number){
 			this.getQuantity();
 			this.httpService.getSearch(this.title,this.selectedPage,this.quantity).subscribe((data:VideoSearchBase)=>{
 			this.OBjectvidio=data;
 			this.MassivOfVidio=data.items;
-			console.log(data);
-			
+			console.log(data);			
 			this.MassivOfVidio.map((item, i, arr)=> {
 				var Vidio=this.MassivOfVidio[i].id.videoId;
 				
@@ -140,11 +183,9 @@ export class AppComponent{
 					var response = res.json();
 					
 					this.MassivOfVidio[i].video=response;
-
 				});
 			});
 			});
-
 			console.log(this.MassivOfVidio);
 	}
 
@@ -152,15 +193,13 @@ export class AppComponent{
 	getvidio(idVidio:string){
 			 this.httpService.getVidios(idVidio).map((res)=>{
 				this.videotest=res.json();
-				
-				
-				
 			});
 			 
 	}
+	
 	getQuantity(){
 		var width=document.documentElement.clientWidth;
-		this.quantity=Math.floor(width/400);
+		this.quantity=50;
 	}
 	hidden(){
 		
@@ -223,3 +262,4 @@ export class AppComponent{
 		}
 	}
 }
+ 
