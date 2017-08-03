@@ -3,7 +3,7 @@ import { Input, Component,EventEmitter, Output} from '@angular/core';
 @Component({
     selector: 'child-comp',
     template: `
-      			<div class="test" *ngFor="let video of MassivOfVidio">
+      			<div class="test" *ngFor="let video of MassivOfVideo">
   			
   			<a [routerLink]="['video', video.id.videoId]"
                     
@@ -45,7 +45,7 @@ import { Input, Component,EventEmitter, Output} from '@angular/core';
 export class ChildComponent{ 
     @Input() video: string;
     @Input() selectedPage: number;
-    @Input() MassivOfVidio:Array<any>;
+    @Input() MassivOfVideo:Array<any>;
     
        @Output() onChanged = new EventEmitter<any>();
     change(increased:any) {

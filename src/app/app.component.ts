@@ -5,13 +5,16 @@ import {VideoSearchBase} from './user';
 @Component({
   selector: 'my-app',
   template: `
+    selectedPage      {{selectedPage }}
+    
   		<div class='center_wrapper'>
   			<div class='center'>
   			  			<nav>
                 <a routerLink="">Главная</a>
 			</nav>
    			
-  			<first [(Title)]="title"></first>
+  			<first [(Title)]="title" (onCheckEnter)="onCheckEnter($event)"
+  			(onclickButton)="onclickButton()"></first>
   		    <button *ngIf="!show" (click)="hidden()">{{show ? 'hide' : 'show'}}</button>
   			
   			</div>
@@ -23,16 +26,8 @@ import {VideoSearchBase} from './user';
   			<div  *ngIf="show">	
   				<h1>find</h1>
   		  		<h2>{{title}}</h2>
-  				<div class="buttons"><button *ngFor="let page of pages"
-  					(click)=onSelectedPage(page) 
-  					[class.selected]='selectedPage===page'
-  				>
-  				{{page}}
-  				</button>
-  				</div>
-  			
   			<child-comp [video]="video"
-  				[MassivOfVidio]="MassivOfVidio"
+  				[MassivOfVideo]="MassivOfVideo"
   			 	(onChanged)="onSelectedVideo($event)">
   			</child-comp>
   		</div>
@@ -55,7 +50,8 @@ import {VideoSearchBase} from './user';
         .content_wrapper{
         	position: relative;
     		background: #f0f0f0; 
-    		overflow: auto; 
+    		overflow-y: auto; 
+    		overflow-x: hidden;
     		height: 1100px;
     		width: 437px;
         }
@@ -129,64 +125,108 @@ export class AppComponent {
 	minPage=1;
 	maxPage:number;
  	selectedPage:number;
- 	
+ 	MassivOfVideoAdd:Array<any>;
  	OBjectvidio:any;
- 	MassivOfVidio:Array<any>;
+ 	MassivOfVideo:Array<any>;
  	MassivOfVideoNew:Array<any>=[];
  	videotest:any;
+ 	stopFlag:boolean=true;
 	constructor (
 		private httpService: HttpService){
 		this.getpages();
 		
 		this.wheel();
 	}
-	 
+	onclickButton(){
+		if(this.show===false){this.hidden();}
+			else{
+			var element=document.querySelector('.content_wrapper');
+			element.scrollTop=0;
+			this.onSelectedPage(1);
+			}
+	}
+	onCheckEnter(e:KeyboardEvent){
+		console.log(e.keyCode);
+		console.log(e.keyCode==13);
+		if(e.keyCode==13){this.onclickButton();
+		}
+		
+	}
 	wheel(){
-
-		console.log(1111);
 		document.onwheel = (e) =>{
 		var element=document.querySelector('.content_wrapper');
-
-		var parent= e.target.parentNode;
-		console.log(parent);
-		console.log(e.target);
+		var parent:any= e.target;
+		parent=parent.parentNode;
+		
 		if (e.target!= element){
 		while(parent!==document&&parent!==element){
 			parent=parent.parentNode;
-			console.log(parent);
+			
 		}}
   		if (parent==document) return;
-  		var area = element;
+  		function getScrollPercent() {
+		return ((element.scrollTop || element.scrollTop) 
+    	/( (element.scrollHeight || element.scrollHeight) 
+    	- element.clientHeight) 
+    	*100);
+		}
+	
+		if (getScrollPercent()>50){
+			console.log(this.stopFlag);
+			if(this.stopFlag==true){
+			this.onSelectedPage(this.selectedPage+1);
+			this.stopFlag=false;
+			}
+		;}
+		
+		console.log(getScrollPercent());
   		var delta = e.deltaY || e.detail || e.wheelDelta;
  			 if (delta < 0 && element.scrollTop == 0) {
  			/* this.onSelectedPage(this.selectedPage-1);*/
     		e.preventDefault();
   		}
- 	 		if (delta > 0 && element.scrollHeight - element.clientHeight - element.scrollTop <= 1) {
-   	 		console.log("here");
-   	 		this.onSelectedPage(this.selectedPage+1);
+ 	 	if (delta > 0 && element.scrollHeight - element.clientHeight - element.scrollTop <= 1) {
+   	 		
+   	 		
    	 		e.preventDefault();
   		}
-    	console.log(element.scrollHeight - element.clientHeight - element.scrollTop );
+    
 		};
 	}
 	main(page:number){
-			this.getQuantity();
+		this.getQuantity();
+		if (page==1){
 			this.httpService.getSearch(this.title,this.selectedPage,this.quantity).subscribe((data:VideoSearchBase)=>{
-			this.OBjectvidio=data;
-			this.MassivOfVidio=data.items;
-			console.log(data);			
-			this.MassivOfVidio.map((item, i, arr)=> {
-				var Vidio=this.MassivOfVidio[i].id.videoId;
-				
-				this.httpService.getVidios(Vidio).subscribe((res)=>{
+				this.OBjectvidio=data;
+				this.MassivOfVideo=data.items;
+				console.log(data);			
+				this.MassivOfVideo.map((item, i, arr)=> {
+					var Video=this.MassivOfVideo[i].id.videoId;
+					this.httpService.getVidios(Video).subscribe((res)=>{
 					var response = res.json();
-					
-					this.MassivOfVidio[i].video=response;
+					this.MassivOfVideo[i].video=response;
+					});
 				});
 			});
-			});
-			console.log(this.MassivOfVidio);
+		}
+		else{
+			this.httpService.getSearch(this.title,this.selectedPage,this.quantity).subscribe((data:VideoSearchBase)=>{
+				this.OBjectvidio=data;
+				this.MassivOfVideoAdd=data.items;		
+				this.MassivOfVideoAdd.map((item, i, arr)=> {
+					var Video=this.MassivOfVideo[i].id.videoId;
+					this.httpService.getVidios(Video).subscribe((res)=>{
+						var response = res.json();
+						this.MassivOfVideo[i].video=response;
+					});
+				});
+				this.stopFlag=true;	
+			});	
+		Array.prototype.push.apply(this.MassivOfVideo,this.MassivOfVideoAdd);
+		}
+	}
+	addVideo(){
+
 	}
 
 
@@ -199,7 +239,7 @@ export class AppComponent {
 	
 	getQuantity(){
 		var width=document.documentElement.clientWidth;
-		this.quantity=50;
+		this.quantity=10;
 	}
 	hidden(){
 		

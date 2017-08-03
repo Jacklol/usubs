@@ -14,14 +14,14 @@ export class HttpService{
     }
      
     getSearch(title:string,page:number,quantity:number) : Observable<VideoSearchBase>{
-
+        this.ink=0;
        var stopPolling = new Subject();
        var currentTitle = "";
        var pagetoken='';
        var requestStarted = false;
 
        if(title===undefined||title===''){title="google"}
-       
+        if(pagetoken===undefined){pagetoken=""}
               
          return  Observable.create((observer:any)=>{
             Observable
@@ -43,13 +43,18 @@ export class HttpService{
                 .takeUntil(stopPolling)
                 .subscribe(
                     res => { 
-                      
-
+                        console.log("res.nextPageToken");
+                      console.log(res.nextPageToken);
+                        if (res.nextPageToken!==undefined){
                         pagetoken=res.nextPageToken;
-                                            
+                        }else{
+                            pagetoken="";
+                        }                    
                         this.ink++;
                         if (this.ink===page){
                             this.ink=0;
+                            console.log("this.ink");
+                            console.log(this.ink);
                             stopPolling.next(true);
                             observer.next(res);
                             observer.complete();
