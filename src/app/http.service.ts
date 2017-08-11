@@ -4,6 +4,7 @@ import { Http, Headers, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import {VideoSearchBase} from './user';
+
 @Injectable()
 export class HttpService{
     private _repeatTime = 1000 * 0.01; 
@@ -73,5 +74,8 @@ export class HttpService{
          return  this.http.get('https://www.googleapis.com/youtube/v3/videos?key=AIzaSyCTWC75i70moJLzyNh3tt4jzCljZcRkU8Y&'
              +'id='+idVidio+'&part=snippet,statistics')
              
+    }
+    getSubs(idVidio:string){
+        return  this.http.get('https://video.google.com/timedtext?hl=en&v='+idVidio+'&type=list&type=list')  
     }
 }

@@ -3,9 +3,9 @@ export interface VideoSearchBase{
 	etag: string;
 	items: Array<Video>;
 	kind:string;
-	videoInfo:videoInfo;
+	videoInfo:VideoInfo;
 }
-export interface videoInfo{
+export interface VideoInfo{
 	items:string;
 }
 export interface Video{

@@ -5,66 +5,68 @@ import {VideoSearchBase} from './user';
 @Component({
   selector: 'my-app',
   template: `
-    selectedPage      {{selectedPage }}
-    
+  <div class="container">
+  	
+  	
+
+  	<div class="middle_center_wrapper">
   		<div class='center_wrapper'>
   			<div class='center'>
   			  			<nav>
                 <a routerLink="">Главная</a>
 			</nav>
-   			
   			<first [(Title)]="title" (onCheckEnter)="onCheckEnter($event)"
-  			(onclickButton)="onclickButton()"></first>
-  		    <button *ngIf="!show" (click)="hidden()">{{show ? 'hide' : 'show'}}</button>
-  			
+  			(onclickButton)="onclickButton()" [show]="show"></first>
+  		    <button  class="buttons" *ngIf="!show" (click)="hidden()">  &rang;</button>
   			</div>
   		</div>
-
-
-  		<div class='content_wrapper'>
-  		<div class='content'>
-  			<div  *ngIf="show">	
-  				<h1>find</h1>
-  		  		<h2>{{title}}</h2>
-  			<child-comp [video]="video"
-  				[MassivOfVideo]="MassivOfVideo"
-  			 	(onChanged)="onSelectedVideo($event)">
-  			</child-comp>
-  		</div>
-  		</div>		
+  			<div class="middle">
+	  		<router-outlet ></router-outlet>	
+	  	</div>
 	</div>
-	
-		
-  		<div class="middle">
-	  	<router-outlet ></router-outlet>	
-	  	</div>	
-	  	 <footer style="position: absolute; bottom: 0">
-    	Конец документа.
-  		</footer>
+	<div class='content_wrapper' *ngIf="show">
+	  	<div class='content'>
+	  		
+	  			<child-comp [video]="video"
+	  				[MassivOfVideo]="MassivOfVideo"
+	  			 	(onChanged)="onSelectedVideo($event)">
+	  			</child-comp>
+	  		
+	  	</div>		
+	</div>	
+</div>	  	 
   `, providers: [HttpService],  styles: [
 
         `
-        .body{
-        	style="height: 1000px; position: relative
+        .container{
+	
+	}
+        .middle_center_wrapper{
+        display:inline-block;
+   	    width: 60%;
+   	    margin-left: 2rem;
         }
         .content_wrapper{
+        	float: left;
+    		display: inline-block;
         	position: relative;
     		background: #f0f0f0; 
     		overflow-y: auto; 
     		overflow-x: hidden;
     		height: 1100px;
     		width: 437px;
+    		margin-right: 2rem;
         }
         .middle{
-        	float:left;
+        	
         	margin-left:20px;
         }
         .content{
         	float: left;
         	position: absolute;
-        	top: 15px;
         }
         .center_wrapper{
+
         z-index:1;
      	width: 100%;
     	height: 100%;
@@ -80,20 +82,12 @@ import {VideoSearchBase} from './user';
         	
         	
         }
-        
         .top{
-        	margin: auto;
-        	width: 40%;
-        	
-
+       	
         	
         }
          .selected{
         	background-color:green;
-
-        }
-        .buttons{
-
         }
         .wrapper{
         margin: auto;
@@ -134,23 +128,7 @@ export class AppComponent {
 	constructor (
 		private httpService: HttpService){
 		this.getpages();
-		
 		this.wheel();
-	}
-	onclickButton(){
-		if(this.show===false){this.hidden();}
-			else{
-			var element=document.querySelector('.content_wrapper');
-			element.scrollTop=0;
-			this.onSelectedPage(1);
-			}
-	}
-	onCheckEnter(e:KeyboardEvent){
-		console.log(e.keyCode);
-		console.log(e.keyCode==13);
-		if(e.keyCode==13){this.onclickButton();
-		}
-		
 	}
 	wheel(){
 		document.onwheel = (e) =>{
@@ -159,38 +137,29 @@ export class AppComponent {
 		parent=parent.parentNode;
 		
 		if (e.target!= element){
-		while(parent!==document&&parent!==element){
+			while(parent!==document&&parent!==element){
 			parent=parent.parentNode;
-			
-		}}
-  		if (parent==document) return;
-  		function getScrollPercent() {
-		return ((element.scrollTop || element.scrollTop) 
-    	/( (element.scrollHeight || element.scrollHeight) 
-    	- element.clientHeight) 
-    	*100);
-		}
-	
-		if (getScrollPercent()>50){
-			console.log(this.stopFlag);
-			if(this.stopFlag==true){
-			this.onSelectedPage(this.selectedPage+1);
-			this.stopFlag=false;
+			}}
+  			if (parent==document) return;
+  			function getScrollPercent() {
+			return ((element.scrollTop || element.scrollTop) 
+    		/( (element.scrollHeight || element.scrollHeight) 
+    		- element.clientHeight) 
+    		*100);
 			}
-		;}
-		
-		console.log(getScrollPercent());
-  		var delta = e.deltaY || e.detail || e.wheelDelta;
- 			 if (delta < 0 && element.scrollTop == 0) {
- 			/* this.onSelectedPage(this.selectedPage-1);*/
-    		e.preventDefault();
-  		}
- 	 	if (delta > 0 && element.scrollHeight - element.clientHeight - element.scrollTop <= 1) {
-   	 		
-   	 		
+			if (getScrollPercent()>50){
+				if(this.stopFlag==true){
+				this.onSelectedPage(this.selectedPage+1);
+				this.stopFlag=false;
+				}
+			;}
+  			var delta = e.deltaY || e.detail || e.wheelDelta;
+ 			if (delta < 0 && element.scrollTop == 0) {
+ 			e.preventDefault();
+  			}
+ 	 		if (delta > 0 && element.scrollHeight - element.clientHeight - element.scrollTop <= 1) {
    	 		e.preventDefault();
-  		}
-    
+  			}
 		};
 	}
 	main(page:number){
@@ -285,6 +254,19 @@ export class AppComponent {
 	localStorage.setItem('title', this.video.snippet.title);
 	
 	
+	}
+	onclickButton(){
+		if(this.show===false){this.hidden();}
+			else{
+			var element=document.querySelector('.content_wrapper');
+			element.scrollTop=0;
+			this.onSelectedPage(1);
+			}
+	}
+	onCheckEnter(e:KeyboardEvent){
+		if(e.keyCode==13){this.onclickButton();
+		}
+		
 	}
 	onSelectedPage(page:number){
 		this.selectedPage=page;
