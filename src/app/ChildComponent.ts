@@ -6,7 +6,6 @@ import { Input, Component,EventEmitter, Output} from '@angular/core';
     selector: 'child-comp',
     template: `
       			<div class="test" *ngFor="let video of MassivOfVideo">
-  			{{video}}
   			<a [routerLink]="['video', video.id.videoId]"
                     
                     (click)=change(video)>	
@@ -16,12 +15,22 @@ import { Input, Component,EventEmitter, Output} from '@angular/core';
   				<div>{{video.snippet.publishedAt}}</div>
   			</a> 			 
   			</div>
-  			<div>ssss</div>
+  			<div class="no_more"> 
+          <span>no more videos</span>
+        </div>
               `
               ,styles: [
         ` .selected{
+
         	background-color:green;
 
+        }
+        .no_more{
+          margin:auto;
+          height:600px;
+          text-align:center;
+          padding:20px;
+          font: italic 190% serif;
         }
         .buttons{
 

@@ -9,9 +9,10 @@ import {VideoSearchBase} from './user';
 export class HttpService{
     private _repeatTime = 1000 * 0.01; 
     ink=0;
-    
+    stop:boolean=false;
     
     constructor(private http: Http){
+
     }
      
     getSearch(title:string,page:number,quantity:number) : Observable<VideoSearchBase>{
@@ -44,8 +45,7 @@ export class HttpService{
                 .takeUntil(stopPolling)
                 .subscribe(
                     res => { 
-                        console.log("res.nextPageToken");
-                      console.log(res.nextPageToken);
+                        console.log(res);
                         if (res.nextPageToken!==undefined){
                         pagetoken=res.nextPageToken;
                         }else{
@@ -54,8 +54,6 @@ export class HttpService{
                         this.ink++;
                         if (this.ink===page){
                             this.ink=0;
-                            console.log("this.ink");
-                            console.log(this.ink);
                             stopPolling.next(true);
                             observer.next(res);
                             observer.complete();

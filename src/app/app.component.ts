@@ -2,22 +2,22 @@ import { Component,OnInit} from '@angular/core';
 import { HttpService} from './http.service';
 import { Response} from '@angular/http';
 import {VideoSearchBase} from './user';
+
 @Component({
   selector: 'my-app',
   template: `
-  <div class="container">
-  	
-  	
 
+  <div class="container">
   	<div class="middle_center_wrapper">
-  		<div class='center_wrapper'>
-  			<div class='center'>
+  	 <a routerLink="" (click)='changeShow()'>Главная</a>
+  		<div class='top'  *ngIf="show">
+  			<div >
   			  			<nav>
-                <a routerLink="">Главная</a>
+               
 			</nav>
   			<first [(Title)]="title" (onCheckEnter)="onCheckEnter($event)"
-  			(onclickButton)="onclickButton()" [show]="show"></first>
-  		    <button  class="buttons" *ngIf="!show" (click)="hidden()">  &rang;</button>
+  			(onclickButton)="onclickButton()" ></first>
+
   			</div>
   		</div>
   			<div class="middle">
@@ -106,14 +106,15 @@ import {VideoSearchBase} from './user';
         `]
 })
 export class AppComponent { 
-	name: string = "Tom";
-	show: boolean = false;
+	isMobile:boolean=false;
+	stop:boolean=false;
+	show: boolean = true;
 	nothidden:string='';
 	videoid:string='';
 	video:any;
 	idVidio:string;
 	quantity:number;
-	title:string="title";
+	title:string="";
 	pages:Array<number>;
 	count:number;
 	minPage=1;
@@ -127,8 +128,28 @@ export class AppComponent {
  	stopFlag:boolean=true;
 	constructor (
 		private httpService: HttpService){
+		
 		this.getpages();
 		this.wheel();
+		this.init();
+	}
+	ngOnInit(){
+		console.log(document.documentElement.clientWidth);
+		if(document.documentElement.clientWidth<800){this.isMobile=true}
+		
+   }
+	init(){
+			window.onload = function() {
+				console.log("load");
+	}
+			window.onunload  = ()=>{
+				
+			
+			/*console.log("here");*/
+				
+				
+			}
+
 	}
 	wheel(){
 		document.onwheel = (e) =>{
@@ -148,9 +169,13 @@ export class AppComponent {
     		*100);
 			}
 			if (getScrollPercent()>50){
-				if(this.stopFlag==true){
-				this.onSelectedPage(this.selectedPage+1);
-				this.stopFlag=false;
+				console.log(this.stop);
+				console.log(this.stopFlag);
+				if(this.stop==false){
+					if(this.stopFlag==true){
+					this.onSelectedPage(this.selectedPage+1);
+					this.stopFlag=false;
+					}
 				}
 			;}
   			var delta = e.deltaY || e.detail || e.wheelDelta;
@@ -165,10 +190,10 @@ export class AppComponent {
 	main(page:number){
 		this.getQuantity();
 		if (page==1){
+			this.stop=false;
 			this.httpService.getSearch(this.title,this.selectedPage,this.quantity).subscribe((data:VideoSearchBase)=>{
 				this.OBjectvidio=data;
 				this.MassivOfVideo=data.items;
-				console.log(data);			
 				this.MassivOfVideo.map((item, i, arr)=> {
 					var Video=this.MassivOfVideo[i].id.videoId;
 					this.httpService.getVidios(Video).subscribe((res)=>{
@@ -181,17 +206,23 @@ export class AppComponent {
 		else{
 			this.httpService.getSearch(this.title,this.selectedPage,this.quantity).subscribe((data:VideoSearchBase)=>{
 				this.OBjectvidio=data;
-				this.MassivOfVideoAdd=data.items;		
+				this.MassivOfVideoAdd=data.items;
+				console.log(this.MassivOfVideoAdd)	;
+				if 	(this.MassivOfVideoAdd.length==0){this.stop=true;}
 				this.MassivOfVideoAdd.map((item, i, arr)=> {
-					var Video=this.MassivOfVideo[i].id.videoId;
+					var Video=this.MassivOfVideoAdd[i].id.videoId;
 					this.httpService.getVidios(Video).subscribe((res)=>{
 						var response = res.json();
-						this.MassivOfVideo[i].video=response;
+						this.MassivOfVideoAdd[i].video=response;
+						
 					});
 				});
+				console.log(this.MassivOfVideoAdd);
+				console.log(page);
+				Array.prototype.push.apply(this.MassivOfVideo,this.MassivOfVideoAdd);
 				this.stopFlag=true;	
-			});	
-		Array.prototype.push.apply(this.MassivOfVideo,this.MassivOfVideoAdd);
+			})	
+		
 		}
 	}
 	addVideo(){
@@ -210,8 +241,7 @@ export class AppComponent {
 		var width=document.documentElement.clientWidth;
 		this.quantity=10;
 	}
-	hidden(){
-		
+/*	hidden(){
 		this.show = true;
 		var element = document.querySelector('.center');
 		element.classList.remove("center");
@@ -220,8 +250,11 @@ export class AppComponent {
 		element.classList.add("top");
 		this.onSelectedPage(1);
 
-	}
-	getCard(){
+
+	}*/
+	changeShow(){
+
+		this.show=true;
 
 	}
 	getpages(){
@@ -244,8 +277,8 @@ export class AppComponent {
 		};
 	}
 	onSelectedVideo(video:any){
-	console.log('onSelectedVideo');
-	console.log(video);
+		if(this.isMobile){
+	this.show=false;}
 	this.video=video;
 	this.videoid=video.id.videoId;
 	localStorage.setItem('videoId', this.videoid);
@@ -256,12 +289,10 @@ export class AppComponent {
 	
 	}
 	onclickButton(){
-		if(this.show===false){this.hidden();}
-			else{
+		this.changeShow();
 			var element=document.querySelector('.content_wrapper');
 			element.scrollTop=0;
 			this.onSelectedPage(1);
-			}
 	}
 	onCheckEnter(e:KeyboardEvent){
 		if(e.keyCode==13){this.onclickButton();
@@ -284,4 +315,3 @@ export class AppComponent {
 		}
 	}
 }
- 

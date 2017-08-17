@@ -11,7 +11,8 @@ import { ModuleWithProviders }  from '@angular/core';
 import { ItemComponent }   from './item.component';
 import { ChildComponent }   from './ChildComponent';
 import { FirstPage }   from './first';
-
+import {SafeHtml} from './sub.pipe';
+import {SafePipe} from './iframe.pipe';
 // определение маршрутов
 const appRoutes: Routes =[
     { path: '', component: HomeComponent},
@@ -22,7 +23,7 @@ const appRoutes: Routes =[
 
 @NgModule({
   imports:      [ BrowserModule, FormsModule,HttpModule,RouterModule.forRoot(appRoutes),],
-  declarations: [ AppComponent,HomeComponent, AboutComponent, NotFoundComponent,ItemComponent,ChildComponent,FirstPage ],
+  declarations: [ AppComponent,HomeComponent, AboutComponent, NotFoundComponent,ItemComponent,ChildComponent,FirstPage,SafeHtml,SafePipe ],
   bootstrap:    [ AppComponent ]
 })
 export class AppModule { }

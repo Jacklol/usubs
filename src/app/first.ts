@@ -2,9 +2,9 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
        
 @Component({
     selector: 'first',
-     template: `<input [ngModel]="Title" (keyup)="CheckEnter($event)"
+     template: `<input [ngModel]="Title"  placeholder="введите запрос" (keyup)="CheckEnter($event)"
 				(ngModelChange)="onNameChange($event)" /><button
-				 class='button' *ngIf="show" (click)="clickButton()">Find</button>`,
+				 class='button' (click)="clickButton()">&rang;</button>`,
  		styles: [
 
         `
@@ -21,7 +21,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
         .button{
         	width:15%;
         	height:3.8rem;
-        	font: italic 190% serif;
+        	font:  190% serif;
         	padding:0;
         	margin:0;
         	border-width:1px;
@@ -33,7 +33,6 @@ export class FirstPage{
      
  
     @Input() Title:string;
-    @Input() show:boolean;
     @Output() TitleChange = new EventEmitter<string>();
     @Output() onCheckEnter = new EventEmitter<KeyboardEvent>();
     @Output() onclickButton= new EventEmitter();
