@@ -1,29 +1,28 @@
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }   from '@angular/forms';
-import { AppComponent }  from './app.component';
+import { AppComponent }  from './components/app.component';
 import { HttpModule }   from '@angular/http';
 import {Routes, RouterModule} from '@angular/router';
-import { AboutComponent }   from './about.component';
-import { HomeComponent }   from './home.component';
-import { NotFoundComponent }   from './not-found.component';
+import { HomeComponent }   from './components/home';
+import { NotFoundComponent }   from './components/not-found';
 import { ModuleWithProviders }  from '@angular/core';
-import { ItemComponent }   from './item.component';
-import { ChildComponent }   from './ChildComponent';
-import { FirstPage }   from './first';
-import {SafeHtml} from './sub.pipe';
-import {SafePipe} from './iframe.pipe';
-// определение маршрутов
-const appRoutes: Routes =[
+import {iframeComponent}   from './components/iframe';
+import {SideBar}   from './components/SideBar';
+import {Search }   from './components/search';
+import {SafeHtml} from './pipes/sub.pipe';
+import {SafePipe} from './pipes/iframe.pipe';
+import {ViewPipe} from './pipes/view.pipe';
+const appRoutes: Routes =[		
     { path: '', component: HomeComponent},
-    { path: 'about', component: AboutComponent},
-    { path: 'video/:id', component: ItemComponent},
+    { path: ':search',component: iframeComponent},
+    { path: ':search/:id', component: iframeComponent},
     { path: '**', component: NotFoundComponent }
 ];
 
 @NgModule({
   imports:      [ BrowserModule, FormsModule,HttpModule,RouterModule.forRoot(appRoutes),],
-  declarations: [ AppComponent,HomeComponent, AboutComponent, NotFoundComponent,ItemComponent,ChildComponent,FirstPage,SafeHtml,SafePipe ],
+  declarations: [ AppComponent,HomeComponent,NotFoundComponent,iframeComponent,SideBar,Search,SafeHtml,SafePipe,ViewPipe],
   bootstrap:    [ AppComponent ]
 })
 export class AppModule { }

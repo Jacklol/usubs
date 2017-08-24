@@ -1,5 +1,6 @@
 
 export interface VideoSearchBase{
+	nextPageToken:string;
 	etag: string;
 	items: Array<Video>;
 	kind:string;
