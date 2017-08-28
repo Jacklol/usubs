@@ -1,36 +1,37 @@
 .img{
-        text-align:center;
-            }
-          .description{
-          margin-left: 13px;
-          }
-          .no_more{
-          margin:auto;
-          height:600px;
-          text-align:center;
-          padding:20px;
-          font: italic 190% serif;
-          }
-        .wrapper{
-         margin: auto;
-    	    width: 75%;
-        }
-        
-        .cardOfVideo:hover {
-              border-color: rgb(23, 249, 50);
-              background-color:rgb(234, 246, 255);
-        }
-        a:hover{
-          color:#167ac6;
-
-        }
-        .title,.channelTitle,.viewCount,.date{
-            margin: 5px;
-            padding: 7px;
-                font-size: medium;
-    
+  text-align:center;
 }
-      .title{
-         font-weight: bolder;   }
-           
+.description{
+  margin-left: 13px;
+}
+.no_more{
+  margin:auto;
+  height:600px;
+  text-align:center;
+  padding:20px;
+  font: italic 190% serif;
+}
+.wrapper{
+ margin: auto;
+ width: 75%;
+}
+
+.cardOfVideo:hover {
+  border-color: rgb(23, 249, 50);
+  background-color:rgb(234, 246, 255);
+}
+a:hover{
+  color:#167ac6;
+
+}
+.title,.channelTitle,.viewCount,.date{
+  margin: 5px;
+  padding: 7px;
+  font-size: medium;
+
+}
+.title{
+  font-weight: bolder;
+}
+
 
