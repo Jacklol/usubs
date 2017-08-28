@@ -14,7 +14,7 @@ import {SafeHtml} from './pipes/sub.pipe';
 import {SafePipe} from './pipes/iframe.pipe';
 import {ViewPipe} from './pipes/view.pipe';
 const appRoutes: Routes =[		
-    { path: '', component: HomeComponent},
+    { path: '', component: iframeComponent},
     { path: ':search',component: iframeComponent},
     { path: ':search/:id', component: iframeComponent},
     { path: '**', component: NotFoundComponent }

@@ -6,7 +6,7 @@ import { Router} from '@angular/router';
 @Component({
   selector: 'my-app',
   template: `
-  <a routerLink="" (click)='changeShow()'><img src="../../logo.png"> </a>
+  <a routerLink="" (click)='changeShow()' class='logo'><img src="../../logo.png"> </a>
   	<div class="container">
 	  	<div class="middle_center_wrapper">
 	  		<div class='top'   *ngIf="show||!isMobile">
@@ -14,7 +14,7 @@ import { Router} from '@angular/router';
 	  			(onclickButton)="onclickButton()"></search>
 	  		</div>
 	  		<div class="middle">
-	  			<a [routerLink]=""(click)='changeShow()' *ngIf="!show&&isMobile"> ВОЗВРАТ</a>
+	  			<a [routerLink]=""(click)='changeShow()' *ngIf="!show&&isMobile"><button class="buttonback">Back</button></a>
 		  		<router-outlet ></router-outlet>	
 		  	</div>
 		</div>
@@ -108,19 +108,19 @@ export class AppComponent {
 		var targetel:any= e.target;
 		var parent:any=targetel.parentNode;
 		if ((e.target!= element)&&(targetel.parentNode!==null)){
-			console.log(targetel.parentNode!==null);
+	
 			while(parent!==document&&parent!==element){
 			parent=parent.parentNode;
 			}}
   			if (parent==document) return;
-  			function getScrollPercent() {
-			return ((element.scrollTop || element.scrollTop) 
-    		/( (element.scrollHeight || element.scrollHeight) 
-    		- element.clientHeight) 
-    		*100);
+  			var getScrollPercent = () => {
+				return ((element.scrollTop || element.scrollTop) 
+	    		/( (element.scrollHeight || element.scrollHeight) 
+	    		- element.clientHeight) 
+	    		*100);
 			}
 			if (getScrollPercent()>50){
-				if(this.stop==false){
+				if(!this.stop){
 					if(this.stopFlag==true){
 					this.onSelectedPage(this.selectedPage+1);
 					this.stopFlag=false;
@@ -157,7 +157,6 @@ export class AppComponent {
 			.map((res)=> res.json()).subscribe((data:VideoSearchBase)=>{
 				this.nextPageToken=data.nextPageToken;
 				this.arrayOfVideoAdd=data.items;
-				console.log(data)	;
 				if 	(this.arrayOfVideoAdd.length==0){this.stop=true;}
 				this.arrayOfVideoAdd.map((item, i, arr)=> {
 					var Video=this.arrayOfVideoAdd[i].id.videoId;
@@ -199,6 +198,7 @@ export class AppComponent {
 		};
 	}
 	onSelectedVideo(video:any){
+		
 		var title=this.title;
 		this.show=false;
 		localStorage.setItem('show',""+this.show);
@@ -206,7 +206,8 @@ export class AppComponent {
 		this.videoid=video.id.videoId;
 		localStorage.setItem('videoId', this.videoid);
 		localStorage.setItem('channelTitle', this.video.snippet.channelTitle);
-		localStorage.setItem('channelTitle', this.video.snippet.channelTitle);
+		localStorage.setItem('description', this.video.videoinfo.items[0].snippet.description);
+		
 		
 	}
 	onclickButton(){

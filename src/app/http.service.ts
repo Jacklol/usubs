@@ -20,7 +20,7 @@ export class HttpService{
         var pagetoken=nextPageToken
         if(nextPageToken==undefined||page==1){pagetoken=""}
          return this.http.get('https://www.googleapis.com/youtube/v3/search?key=AIzaSyCTWC75i70moJLzyNh3tt4jzCljZcRkU8Y&type=video&part=snippet&maxResults='
-                                +quantity+'&q='+title+'&order=rating'+'&pageToken='+pagetoken)
+                                +quantity+'&q='+title+'&order=viewCount'+'&pageToken='+pagetoken)
     }
     getFullSubs(url:string){
          return  this.http.get(url);
@@ -34,6 +34,9 @@ export class HttpService{
     }
     getSubs(idVidio:string){
         return  this.http.get('https://video.google.com/timedtext?hl=en&v='+idVidio+'&type=list&type=list')  
+    }
+    getInfoCaptions(idVidio:string){
+      return  this.http.get(' https://www.googleapis.com/youtube/v3/captions?part=snippet&videoId='+idVidio+'&key=AIzaSyDlcg8UFkX8RHWfmo3aWxckbc1Mq95QfwU')
     }
     getSearcOld(title:string,page:number,quantity:number,nextPageToken:string) : Observable<VideoSearchBase>{
         this.ink=0;
@@ -64,12 +67,13 @@ export class HttpService{
                 .subscribe(
                     res => { 
                         console.log(res);
-                        if(res.nextPageToken==pagetoken){
+                        if (res.nextPageToken==pagetoken){
                             console.log("koett")
                         }
                         if (res.nextPageToken!==undefined){
-                        pagetoken=res.nextPageToken;
-                        }else{
+                            pagetoken=res.nextPageToken;
+                        } 
+                        else {
                             pagetoken="";
                         }                    
                         this.ink++;

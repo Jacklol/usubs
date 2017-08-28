@@ -6,7 +6,7 @@ import { Input, Component,EventEmitter, Output,OnInit} from '@angular/core';
     selector: 'SideBar',
     template: `
       			<div class="cardOfVideo" *ngFor="let video of arrayOfVideo">
-    			    <a  [routerLink]="['VS']"
+    			    <a  [routerLink]="['']"
                 [queryParams]="{'search':title, 'Id': video.id.videoId}"
                 (click)=change(video)> 
     				    <div class='title'>{{video.snippet.title}}</div>
@@ -28,5 +28,6 @@ export class SideBar{
     @Output() onChanged = new EventEmitter<any>();
     change(video:any) {
         this.onChanged.emit(video);
+        
     }
 }

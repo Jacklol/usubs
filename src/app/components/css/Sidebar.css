@@ -27,6 +27,10 @@
         .title,.channelTitle,.viewCount,.date{
             margin: 5px;
             padding: 7px;
-        }
+                font-size: medium;
+    
+}
+      .title{
+         font-weight: bolder;   }
            
 

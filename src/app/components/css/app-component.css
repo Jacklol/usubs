@@ -20,8 +20,7 @@
         	
         }
         .content{
-        	float: left;
-        	position: absolute;
+        	
         }
         .center_wrapper{
 
@@ -61,3 +60,14 @@
         	margin:20px 20px 0 0;
 
         }
+        .logo{
+
+            padding-left:15px; 
+            
+        }
+          @media (max-width:1070px) {
+             .middle_center_wrapper{
+                width: 100%;
+                margin:0;
+                }
+          }
