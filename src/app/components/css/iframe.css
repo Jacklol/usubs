@@ -4,6 +4,24 @@
 iframe{
     border-width: 2px;
     margin-left: -2px;
+    width: 70%;
+    height: 355px;
+}
+.description{
+      width: 29%;
+    float: right;
+    height: 351px;
+    overflow: auto;
+}
+@media (max-width: 965px) {
+  iframe{
+   width:100%;
+  }
+  .description{
+    float:none;
+    height: auto;
+    width: 100%;
+  }
 }
 .subt{
    margin-bottom: 10px;
