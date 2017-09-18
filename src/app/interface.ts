@@ -5,10 +5,14 @@ export interface VideoSearchBase {
 	kind: string;
 }
 export interface VideoInfo {
-	items: Array<snippetInfo>;
+	items: Array<SnippetInfo>;
 }
-export interface snippetInfo {
+export interface SnippetInfo {
 	snippet: Snippet;
+	statistics:Statistics;
+}
+export interface Statistics {
+	viewCount:number;
 }
 export interface Video {
 	etag: string;
@@ -30,6 +34,7 @@ export interface Snippet {
 	description: string;
 	publishedAt: string;
 	thumbnails: Thumbnails1;
+	title: string;
 }
 export interface Default {
 	url: string;

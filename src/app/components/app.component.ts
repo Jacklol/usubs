@@ -4,6 +4,8 @@ import { Response } from '@angular/http';
 import { VideoSearchBase, Video } from '../interface';
 import { Router } from '@angular/router';
 import { Variable } from '../constant/constant';
+import { ChangeDetectorRef } from '@angular/core';
+
 @Component({
 	selector: 'my-app',
 	template: `
@@ -11,8 +13,8 @@ import { Variable } from '../constant/constant';
   	<div class="container">
 	  	<div class="middle_center_wrapper">
 	  		<div class='top'   *ngIf="show||!isMobile">
-	  			<search [(Title)]="title"
-	  			(onclickButton)="onclickButton()">
+	  			<search [(title)]="title" 
+	  			(onClickButton)="onClickButton()">
 	  			</search>
 	  		</div>
 	  		<div class="middle">
@@ -22,11 +24,10 @@ import { Variable } from '../constant/constant';
 		</div>
 		<div class='content_wrapper' *ngIf="show||!isMobile">
 		 	<div class='content'>
-		  			<SideBar 
-		  			[title]="title"
-		  				[Videos]="Videos"
-		  			 	(onChanged)="onSelectedVideo($event)">
-		  			</SideBar>
+				<SideBar [title]="title"
+		  			[videos]="videos"
+		  			(onChanged)="onSelectedVideo($event)">
+		  		</SideBar>
 		  	</div>		
 		</div>	
  	</div>	
@@ -42,12 +43,13 @@ export class AppComponent {
 	quantity: number = Variable.quantity;
 	title: string = "";
 	selectedPage: number;
-	VideosAdd: Array<Video> = [];
-	Videos: Array<Video> = [];
+	videosAdd: Array<Video> = [];
+	videos: Array<Video> = [];
 	stopFlag: boolean = true;
 	constructor(
 		private router: Router,
-		private httpService: HttpService) {
+		private httpService: HttpService,
+		private ref: ChangeDetectorRef) {
 	}
 	ngOnInit() {
 		this.wheel();
@@ -68,8 +70,8 @@ export class AppComponent {
 		}
 	}
 	resizeInit() {
-		function debounce(func:Function, wait: number) {
-			var timeout:NodeJS.Timer;
+		function debounce(func: Function, wait: number) {
+			var timeout: NodeJS.Timer;
 			return function () {
 				var context = this, args = arguments;
 				var later = function () {
@@ -94,6 +96,7 @@ export class AppComponent {
 			var targetel = <HTMLElement>e.target;
 			var parent = targetel.parentNode;
 			if ((e.target != element) && (targetel.parentNode !== null)) {
+
 				while (parent !== document && parent !== element) {
 					parent = parent.parentNode;
 				}
@@ -105,7 +108,8 @@ export class AppComponent {
 						- element.clientHeight)
 					* 100);
 			}
-			if (getScrollPercent() > Variable.getScrollPercent) {
+			if (getScrollPercent() > 20) {
+
 				if (!this.stop) {
 					if (this.stopFlag == true) {
 						this.onSelectedPage(this.selectedPage + 1);
@@ -118,22 +122,27 @@ export class AppComponent {
 	main(page: number) {
 		if (page == 0) {
 			this.stop = false;
-			this.Videos = [];
+			this.videos = [];
 		}
 		this.httpService.getSearch(this.title, this.selectedPage, this.quantity, this.nextPageToken)
 			.map((res) => res.json()).subscribe((data: VideoSearchBase) => {
 				this.nextPageToken = data.nextPageToken;
-				this.VideosAdd = data.items;
-				if (this.VideosAdd.length == 0) { this.stop = true; }
-				this.VideosAdd.map((item, i, arr) => {
-					var Video = this.VideosAdd[i].id.videoId;
+				this.videosAdd = data.items;
+				if (this.videosAdd.length == 0) {
+					this.stop = true;
+					return;
+				}
+				this.videosAdd.map((item, i, arr) => {
+					var Video = this.videosAdd[i].id.videoId;
 					this.httpService.getVideos(Video).subscribe((res) => {
 						var response = res.json();
-						this.VideosAdd[i].videoInfo = response;
+						this.videosAdd[i].videoInfo = response;
+						this.ref.detectChanges();
 					});
 				});
-				Array.prototype.push.apply(this.Videos, this.VideosAdd);
+				Array.prototype.push.apply(this.videos, this.videosAdd);
 				this.stopFlag = true;
+				this.ref.detectChanges();
 			})
 	}
 	changeShow() {
@@ -149,7 +158,7 @@ export class AppComponent {
 		localStorage.setItem('description', video.videoInfo.items[0].snippet.description);
 		localStorage.setItem('description', video.videoInfo.items[0].snippet.description);
 	}
-	onclickButton() {
+	onClickButton() {
 		localStorage.setItem('title', this.title);
 		var title = this.title;
 		if (!this.isMobile == true) {
