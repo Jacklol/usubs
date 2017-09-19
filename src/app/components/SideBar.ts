@@ -18,7 +18,7 @@ import { Video } from '../interface';
                   <span>no more videos</span>
                 </div>
               `
-    , styleUrls: ["./css/Sidebar.css"]
+    , styleUrls: ["./css/sidebar.css"]
 })
 export class SideBar {
     @Input() title: string;
