@@ -16,20 +16,17 @@
  margin: auto;
  width: 75%;
 }
-
 .cardOfVideo:hover {
   border-color: rgb(23, 249, 50);
   background-color:rgb(234, 246, 255);
 }
 a:hover{
   color:#167ac6;
-
 }
 .title,.channelTitle,.viewCount,.date{
   margin: 5px;
   padding: 7px;
   font-size: medium;
-
 }
 .title{
   font-weight: bolder;

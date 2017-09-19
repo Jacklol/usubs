@@ -61,8 +61,6 @@ button:active {
 .iframe{
   height: 355px;
 }
-
-
 .content_wrapper{    
   float: left;
   display: inline-block;
@@ -87,8 +85,6 @@ button:active {
   border: ridge rgba(80, 147, 150, 0.5);
   border-width: 1px 2px;
 }
-
-
 @media  (max-width: 1400px){
   .content_wrapper{
     float: left;
@@ -132,9 +128,4 @@ button:active {
     border-width: 0;
     border-width: 1px 0px;
   }
-  
 }  
-  /*.cardOfVideo{
-            width: 100%;
-            border-width: 1px 0px;
-          }*/
