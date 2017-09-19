@@ -12,6 +12,7 @@ iframe{
     float: right;
     height: 351px;
     overflow: auto;
+    overflow-x: hidden;
 }
 @media (max-width: 965px) {
   iframe{
@@ -21,7 +22,6 @@ iframe{
     float:none;
     height: auto;
     width: 100%;
-    overflow-x: hidden;
   }
 }
 .subt{
