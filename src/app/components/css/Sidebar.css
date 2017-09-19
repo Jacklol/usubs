@@ -3,6 +3,7 @@
 }
 .description{
   margin-left: 13px;
+  overflow-x: hidden;
 }
 .no_more{
   margin:auto;
