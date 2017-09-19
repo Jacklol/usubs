@@ -7,20 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/x-icon" href="logos.png">
-    <!-- Polyfill(s) for older browsers -->
-    <script  src="https://apis.google.com/js/api.js"
-  >
-    </script>
-  <script src="https://unpkg.com/core-js@2.4.1/client/shim.min.js"></script>
-  <script src="https://unpkg.com/zone.js@0.8.5?main=browser"></script>
-  <script src="https://unpkg.com/systemjs@0.19.40/dist/system.src.js"></script>
-
+    <script  src="https://apis.google.com/js/api.js"></script>
+    <script src="https://unpkg.com/core-js@2.4.1/client/shim.min.js"></script>
+    <script src="https://unpkg.com/zone.js@0.8.5?main=browser"></script>
+    <script src="https://unpkg.com/systemjs@0.19.40/dist/system.src.js"></script>
     <script src="systemjs.config.js"></script>
-
     <script>
       System.import('main.js').catch(function(err){ console.error(err); });
     </script>
-
   </head>
 
   <body>
